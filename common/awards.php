@@ -9,7 +9,7 @@
 /*
  * @package EDK
  */
-class pAwards extends pageAssembly
+class pAwards extends pageAssemblyEx
 {
     /** @var array The array of menu options */
     protected $menuOptions;
@@ -24,9 +24,6 @@ class pAwards extends pageAssembly
     protected $year;
     /** @var string The current user-selected view */
     protected $view;
-
-    /** @var Page The Page object used to display this page. */
-    public $page;
 
     /**
      * Construct the Alliance Details object.
@@ -328,13 +325,4 @@ class pAwards extends pageAssembly
 }
 
 $award = new pAwards();
-event::call("award_assembling", $award);
-$html = $award->assemble();
-$award->page->setContent($html);
-
-$award->context();
-event::call("award_context_assembling", $award);
-$context = $award->assemble();
-$award->page->addContext($context);
-
-$award->page->generate();
+$award->assemble("award");

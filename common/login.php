@@ -9,11 +9,8 @@
 /*
  * @package EDK
  */
-class pLogin extends pageAssembly
+class pLogin extends pageAssemblyEx
 {
-
-    /** @var Page The Page object used to display this page. */
-    public $page;
 
     function __construct()
     {
@@ -86,8 +83,4 @@ class pLogin extends pageAssembly
 
 
 $login = new pLogin();
-event::call("login_assembling", $about);
-$html = $login->assemble();
-$login->page->setContent($html);
-
-$login->page->generate();
+$login->assemble("login");

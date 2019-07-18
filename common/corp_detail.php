@@ -10,10 +10,8 @@ use EDK\ESI\ESI;
 /*
  * @package EDK
  */
-class pCorpDetail extends pageAssembly
+class pCorpDetail extends pageAssemblyEx
 {
-    /** @var Page */
-    public $page = null;
     /** @var integer */
     public $crp_id = 0;
     /** @var integer */
@@ -895,13 +893,4 @@ class pCorpDetail extends pageAssembly
 }
 
 $corpDetail = new pCorpDetail();
-event::call("corpDetail_assembling", $corpDetail);
-$html = $corpDetail->assemble();
-$corpDetail->page->setContent($html);
-
-$corpDetail->context();
-event::call("corpDetail_context_assembling", $corpDetail);
-$context = $corpDetail->assemble();
-$corpDetail->page->addContext($context);
-
-$corpDetail->page->generate();
+$corpDetail->assemble("corpDetail");

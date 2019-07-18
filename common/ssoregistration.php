@@ -3,10 +3,8 @@
 use EDK\ESI\ESISSO;
 use EDK\ESI\EdkSsoException;
 
-class pSsoRegistration extends pageAssembly
+class pSsoRegistration extends pageAssemblyEx
 {
-    /** @var \Page the page object*/
-    public $page;
     /** @var string error message */
     protected $errorMessage = '';
     /** @var string info message */
@@ -233,9 +231,5 @@ class pSsoRegistration extends pageAssembly
 }
 
 $ssoRegistration = new pSsoRegistration();
-event::call("ssoRegistration_assembling", $ssoRegistration);
-$html = $ssoRegistration->assemble();
-$ssoRegistration->page->setContent($html);
-
-$ssoRegistration->page->generate();
+$ssoRegistration->assemble("ssoRegistration");
 ?>

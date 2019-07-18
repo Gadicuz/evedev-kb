@@ -12,10 +12,8 @@ require_once('common/includes/xajax.functions.php');
 /*
  * @package EDK
  */
-class pSearch extends pageAssembly
+class pSearch extends pageAssemblyEx
 {
-    /** @var Page */
-    public $page;
     /** @var string The phrase to search for. */
     public $searchphrase;
     /** @var string The type of result to search for. Valid types are 
@@ -171,8 +169,4 @@ class pSearch extends pageAssembly
 }
 
 $searchDetail = new pSearch();
-event::call("search_assembling", $searchDetail);
-$html = $searchDetail->assemble();
-$searchDetail->page->setContent($html);
-
-$searchDetail->page->generate();
+$searchDetail->assemble("search");

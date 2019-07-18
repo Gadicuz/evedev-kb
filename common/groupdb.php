@@ -8,10 +8,8 @@
 /*
  * @package EDK
  */
-class pInvtype extends pageAssembly
+class pInvtype extends pageAssemblyEx
 {
-    /** @var Page */
-    public $page = null;
     /** @var integer */
     public $groupID = 0;
 
@@ -67,8 +65,4 @@ class pInvtype extends pageAssembly
 
 
 $invtype = new pInvtype();
-event::call("invtype_assembling", $invtype);
-$html = $invtype->assemble();
-$invtype->page->setContent($html);
-
-$invtype->page->generate();
+$invtype->assemble("invtype");

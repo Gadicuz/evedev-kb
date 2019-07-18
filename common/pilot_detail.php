@@ -11,10 +11,8 @@ use EDK\ESI\ESI;
 /*
  * @package EDK
  */
-class pPilotDetail extends pageAssembly
+class pPilotDetail extends pageAssemblyEx
 {
-    /** @var Page */
-    public $page = null;
     /** @var integer */
     public $plt_id = false;
         
@@ -472,13 +470,4 @@ class pPilotDetail extends pageAssembly
 
 
 $pilotDetail = new pPilotDetail();
-event::call("pilotDetail_assembling", $pilotDetail);
-$html = $pilotDetail->assemble();
-$pilotDetail->page->setContent($html);
-
-$pilotDetail->context();
-event::call("pilotDetail_context_assembling", $pilotDetail);
-$context = $pilotDetail->assemble();
-$pilotDetail->page->addContext($context);
-
-$pilotDetail->page->generate();
+$pilotDetail->assemble("pilotDetail");

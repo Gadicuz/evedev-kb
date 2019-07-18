@@ -8,10 +8,8 @@
 /*
  * @package EDK
  */
-class pSystemDetail extends pageAssembly
+class pSystemDetail extends pageAssemblyEx
 {
-    /** @var Page */
-    public $page = null;
     /** @var integer */
     public $sys_id = 0;
 
@@ -356,13 +354,4 @@ class pSystemDetail extends pageAssembly
     }
 }
 $systemDetail = new pSystemDetail();
-event::call("systemdetail_assembling", $systemDetail);
-$html = $systemDetail->assemble();
-$systemDetail->page->setContent($html);
-
-$systemDetail->context();
-event::call("systemdetail_context_assembling", $systemDetail);
-$context = $systemDetail->assemble();
-$systemDetail->page->addContext($context);
-
-$systemDetail->page->generate();
+$systemDetail->assemble("systemdetail");

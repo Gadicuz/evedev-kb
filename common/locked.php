@@ -9,10 +9,8 @@
 /*
  * @package EDK
  */
-class pLocked extends pageAssembly
+class pLocked extends pageAssemblyEx
 {
-    /** @var Page */
-    public $page = null;
 
     function __construct()
     {
@@ -36,8 +34,4 @@ class pLocked extends pageAssembly
 }
 
 $locked = new pLocked();
-event::call("locked_assembling", $locked);
-$html = $locked->assemble();
-$locked->page->setContent($html);
-
-$locked->page->generate();
+$locked->generate("locked");

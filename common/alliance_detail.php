@@ -15,10 +15,8 @@ use \Swagger\Client\ApiException;
  * Display alliance details.
  * @package EDK
  */
-class pAllianceDetail extends pageAssembly
+class pAllianceDetail extends pageAssemblyEx
 {
-    /** @var Page */
-    public $page = null;
     /** @var integer */
     public $all_id = 0;
     /** @var integer */
@@ -1109,13 +1107,4 @@ class pAllianceDetail extends pageAssembly
 }
 
 $allianceDetail = new pAllianceDetail();
-event::call("allianceDetail_assembling", $allianceDetail);
-$html = $allianceDetail->assemble();
-$allianceDetail->page->setContent($html);
-
-$allianceDetail->context();
-event::call("allianceDetail_context_assembling", $allianceDetail);
-$context = $allianceDetail->assemble();
-$allianceDetail->page->addContext($context);
-
-$allianceDetail->page->generate();
+$allianceDetail->assemble("allianceDetail");

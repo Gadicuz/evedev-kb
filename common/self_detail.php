@@ -9,7 +9,7 @@
 /*
  * @package EDK
  */
-class pSelf extends pageAssembly
+class pSelf extends pageAssemblyEx
 {
     /**
      * Construct the Alliance Details object.
@@ -115,11 +115,7 @@ if(count(config::get('cfg_allianceid'))
 {
 
     $selfDetail = new pSelf();
-    event::call("self_assembling", $selfDetail);
-    $html = $selfDetail->assemble();
-    $selfDetail->page->setContent($html);
-
-    $selfDetail->page->generate();
+    $selfDetail->assemble("self");
 }
 else if(config::get('cfg_allianceid'))
 {

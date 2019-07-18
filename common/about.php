@@ -9,10 +9,8 @@
 /*
  * @package EDK
  */
-class pAbout extends pageAssembly
+class pAbout extends pageAssemblyEx
 {
-    /** @var Page The Page object used to display this page. */
-    public $page;
 
     function __construct()
     {
@@ -134,8 +132,4 @@ class pAbout extends pageAssembly
 
 
 $about = new pAbout();
-event::call("about_assembling", $about);
-$html = $about->assemble();
-$about->page->setContent($html);
-
-$about->page->generate();
+$about->assemble("about");

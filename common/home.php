@@ -8,7 +8,7 @@
 /*
  * @package EDK
  */
-class pHome extends pageAssembly
+class pHome extends pageAssemblyEx
 {
     /** @var array */
     private $pargs = array();
@@ -35,8 +35,6 @@ class pHome extends pageAssembly
     protected $scl_id;
     /** @var boolean */
     protected $currentTime;
-    /** @var Page */
-    public $page;
     /** @var boolean */
     protected $showcombined;
     /** @var boolean */
@@ -857,14 +855,4 @@ class pHome extends pageAssembly
 }
 
 $pageAssembly = new pHome();
-event::call("home_assembling", $pageAssembly);
-$html = $pageAssembly->assemble();
-$pageAssembly->page->setContent($html);
-
-$pageAssembly->context(); //This resets the queue and queues context items.
-event::call("home_context_assembling", $pageAssembly);
-$contextHTML = $pageAssembly->assemble();
-$pageAssembly->page->addContext($contextHTML);
-
-
-$pageAssembly->page->generate();
+$pageAssembly->assemble("home");

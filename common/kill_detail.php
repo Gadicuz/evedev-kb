@@ -13,7 +13,7 @@ if (config::get('comments')) {
 /**
  * @package EDK
  */
-class pKillDetail extends pageAssembly
+class pKillDetail extends pageAssemblyEx
 {
     
     /** @var integer The id of the kill this page is for. */
@@ -22,8 +22,6 @@ class pKillDetail extends pageAssembly
     public $kll_external_id;
     /** @var Kill The Kill for the page's kill. */
     protected $kill;
-    /** @var Page The Page used to create this page.*/
-    public $page;
     /** @var array */
     protected $menuOptions = array();
     /** @var boolean */
@@ -1780,13 +1778,4 @@ class pKillDetail extends pageAssembly
 }
 
 $killDetail = new pKillDetail();
-event::call("killDetail_assembling", $killDetail);
-$html = $killDetail->assemble();
-$killDetail->page->setContent($html);
-
-$killDetail->context();
-event::call("killDetail_context_assembling", $killDetail);
-$context = $killDetail->assemble();
-$killDetail->page->addContext($context);
-
-$killDetail->page->generate();
+$killDetail->assemble("killDetail");

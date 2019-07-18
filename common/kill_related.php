@@ -10,7 +10,7 @@
  * Build the related kills page.
  * @package EDK
  */
-class pKillRelated extends pageAssembly
+class pKillRelated extends pageAssemblyEx
 {
 
     /** @var array \SolarSystem */
@@ -29,8 +29,6 @@ class pKillRelated extends pageAssembly
     public $kll_id;
     /** @var Kill */
     protected $kill;
-    /** @var Page */
-    public $page;
     /** @var array */
     protected $menuOptions = array();
     /** @var string timestamp for the first kill of the battle */
@@ -782,14 +780,5 @@ class pKillRelated extends pageAssembly
        return $this->kill_summary;
    }
 }
-$ssoRegistration = new pKillRelated();
-event::call("killRelated_assembling", $ssoRegistration);
-$html = $ssoRegistration->assemble();
-$ssoRegistration->page->setContent($html);
-
-$ssoRegistration->context();
-event::call("killRelated_context_assembling", $ssoRegistration);
-$context = $ssoRegistration->assemble();
-$ssoRegistration->page->addContext($context);
-
-$ssoRegistration->page->generate();
+$killRelated = new pKillRelated();
+$killRelated->assemble("killRelated");

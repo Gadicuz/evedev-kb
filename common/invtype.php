@@ -9,12 +9,10 @@
 /*
  * @package EDK
  */
-class pInvtype extends pageAssembly
+class pInvtype extends pageAssemblyEx
 {
     /** @var integer */
     public $typeID;
-    /** @var Page */
-    public $page;
         /** @var array The list of menu options to display. */
     protected $menuOptions = array();
         
@@ -219,13 +217,4 @@ class pInvtype extends pageAssembly
 
 
 $invtype = new pInvtype();
-event::call("invtype_assembling", $invtype);
-$html = $invtype->assemble();
-$invtype->page->setContent($html);
-
-$invtype->context();
-event::call("invtype_context_assembling", $invtype);
-$context = $invtype->assemble();
-$invtype->page->addContext($context);
-
-$invtype->page->generate();
+$invtype->assemble("invtype");

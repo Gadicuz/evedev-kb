@@ -10,11 +10,8 @@ $page = new Page('Campaigns');
 /*
  * @package EDK
  */
-class pCampaignList extends pageAssembly
+class pCampaignList extends pageAssemblyEx
 {
-    /** @var Page The Page object used to display this page. */
-    public $page;
-    
     /** @var string The selected view. */
     protected $view = null;
     /** @var array The list of views and their callbacks. */
@@ -168,13 +165,4 @@ class pCampaignList extends pageAssembly
 }
 
 $campaignList = new pCampaignList();
-event::call("campaignList_assembling", $campaignList);
-$html = $campaignList->assemble();
-$campaignList->page->setContent($html);
-
-$campaignList->context();
-event::call("campaignList_context_assembling", $campaignList);
-$context = $campaignList->assemble();
-$campaignList->page->addContext($context);
-
-$campaignList->page->generate();
+$campaignList->assemble("campaignList");

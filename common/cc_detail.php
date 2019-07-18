@@ -9,10 +9,8 @@
 /*
  * @package EDK
  */
-class pContractDetail extends pageAssembly
+class pContractDetail extends pageAssemblyEx
 {
-    /** @var Page The Page object used to display this page. */
-    public $page;
     /** @var integer The ID for this page's Contract. */
     public $ctr_id;
     
@@ -374,13 +372,4 @@ class pContractDetail extends pageAssembly
 }
 
 $contractDetail = new pContractDetail();
-event::call("contractDetail_assembling", $contractDetail);
-$html = $contractDetail->assemble();
-$contractDetail->page->setContent($html);
-
-$contractDetail->context();
-event::call("contractDetail_context_assembling", $contractDetail);
-$context = $contractDetail->assemble();
-$contractDetail->page->addContext($context);
-
-$contractDetail->page->generate();
+$contractDetail->assemble("contractDetail");

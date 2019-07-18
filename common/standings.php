@@ -6,9 +6,34 @@
  * @package EDK
  */
 
-$page = new Page();
-$page->setTitle('Standings');
+/**
+ * @package EDK
+ */
+class pStandings extends pageAssemblyEx
+{
 
+    /**
+     * Construct the Standings object.
+     * Add the functions to the build queue.
+     */
+    function __construct()
+    {
+        parent::__construct();
+        $this->queue("start");
+        $this->queue("standings");
+    }
+
+    /**
+     * Start constructing the page.
+     */
+    function start()
+    {
+        $this->page = new Page('Standings');
+    }
+
+    function standings()
+    {
+        global $smarty;
 $qry = DBFactory::getDBQuery();
 $ent = array();
 if (config::get("cfg_corpid")) {
@@ -80,6 +105,9 @@ if ($permt['c']) {
 }
 
 $smarty->assignByRef('standings', $perm);
+        return $smarty->fetch(get_tpl('standings'));
+    }
+}
 
-$page->setContent($smarty->fetch(get_tpl('standings')));
-$page->generate();
+$standingsData = new pStandings();
+$standingsData->assemble("standings");

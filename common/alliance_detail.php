@@ -10,6 +10,7 @@ use EDK\ESI\ESI;
 use EsiClient\AllianceApi;
 use EsiClient\CorporationApi;
 use \Swagger\Client\ApiException;
+require_once('common/includes/trait.pageview.php');
 
 /**
  * Display alliance details.
@@ -17,6 +18,8 @@ use \Swagger\Client\ApiException;
  */
 class pAllianceDetail extends pageAssemblyEx
 {
+    use pageView;
+
     /** @var integer */
     public $all_id = 0;
     /** @var integer */
@@ -26,10 +29,6 @@ class pAllianceDetail extends pageAssemblyEx
     /** @var array allianceDetails alliance information
      *  fetched from the API, populated in stats() */
     public $allianceDetails = null;
-    /** @var string The selected view. */
-    protected $view = null;
-    /** @var array The list of views and their callbacks. */
-    protected $viewList = array();
     /** @var array The list of menu options to display. */
     protected $menuOptions = array();
     /** @var array of Corporation*/
@@ -399,6 +398,9 @@ class pAllianceDetail extends pageAssemblyEx
      */
     function killList()
     {
+        $v = $this->processView();
+        if ( isset($v) ) return $v;
+
         global $smarty;
         if ($this->view == '') {
             $smarty->assign('view', Language::get('recent'));
@@ -408,10 +410,6 @@ class pAllianceDetail extends pageAssemblyEx
 
         $args = array(array('a', 'alliance_detail', true), array('all_id',
             $this->all_id, true));
-        if (isset($this->viewList[$this->view])) {
-            return call_user_func_array($this->viewList[$this->view],
-                    array(&$this));
-        }
         $scl_id = (int) edkURI::getArg('scl_id');
 
         switch ($this->view) {
@@ -1020,19 +1018,6 @@ class pAllianceDetail extends pageAssemblyEx
     }
 
     /**
-
-     * Add a type of view to the options.
-
-     *
-     * @param string $view The name of the view to recognise.
-     * @param mixed $callback The method to call when this view is used.
-     */
-    function addView($view, $callback)
-    {
-        $this->viewList[$view] = $callback;
-    }
-
-    /**
      * Return the set month.
      * @return integer
      */
@@ -1050,15 +1035,6 @@ class pAllianceDetail extends pageAssemblyEx
         return $this->year;
     }
 
-    /**
-     * Return the set view.
-     * @return string
-     */
-    function getView()
-    {
-        return $this->view;
-    }
-        
     /**
      * Return the alliance
      * @return Alliance

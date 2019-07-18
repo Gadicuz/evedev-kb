@@ -5,11 +5,15 @@
  * $HeadURL$
  * @package EDK
  */
+require_once('common/includes/trait.pageview.php');
+
 /*
  * @package EDK
  */
 class pHome extends pageAssemblyEx
 {
+    use pageView;
+
     /** @var array */
     private $pargs = array();
     /** @var array */
@@ -18,8 +22,6 @@ class pHome extends pageAssemblyEx
     private $cargs = array();
     /** @var array */
     protected $menuOptions = array();
-    /** @var array */
-    protected $viewList = array();
     /** @var integer */
     protected $day;
     /** @var integer */
@@ -29,8 +31,6 @@ class pHome extends pageAssemblyEx
     /** @var integer */
     protected $year;
 
-    /** @var string */
-    protected $view;
     /** @var integer */
     protected $scl_id;
     /** @var boolean */
@@ -192,10 +192,8 @@ class pHome extends pageAssemblyEx
      */
     function killList()
     {
-        if (isset($this->viewList[$this->view])) {
-            return call_user_func_array($this->viewList[$this->view],
-                    array(&$this));
-        }
+        $v = $this->processView();
+        if ( isset($v) ) return $v;
 
         global $smarty;
 
@@ -509,15 +507,6 @@ class pHome extends pageAssemblyEx
     }
 
     /**
-     * Return the requested view.
-     * @return string
-     */
-    function getView()
-    {
-        return $this->view;
-    }
-
-    /**
      *
      * @param integer $day
      * @param integer $month
@@ -822,17 +811,6 @@ class pHome extends pageAssemblyEx
        }
    }
 
-    /**
-     * Add a type of view to the options.
-     *
-     * @param string $view The name of the view to recognise.
-     * @param mixed $callback The method to call when this view is used.
-     */
-    function addView($view, $callback)
-    {
-        $this->viewList[$view] = $callback;
-    }
-    
     function getShipClassID() 
     {
         return $this->scl_id;

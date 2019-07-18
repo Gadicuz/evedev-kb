@@ -7,21 +7,20 @@
  */
 use Swagger\Client\ApiException;
 use EDK\ESI\ESI;
+require_once('common/includes/trait.pageview.php');
 
 /*
  * @package EDK
  */
 class pPilotDetail extends pageAssemblyEx
 {
+    use pageView;
+
     /** @var integer */
     public $plt_id = false;
         
     /** @var Pilot the pilot */
     public $pilot = null;
-    /** @var string The selected view. */
-    protected $view = null;
-    /** @var array The list of views and their callbacks. */
-    protected $viewList = array();
     /** @var array The list of menu options to display. */
     protected $menuOptions = array();
     /** @var integer */
@@ -203,11 +202,10 @@ class pPilotDetail extends pageAssemblyEx
      */
     function killList()
     {
+        $v = $this->processView();
+        if ( isset($v) ) return $v;
+
         global $smarty;
-        if(isset($this->viewList[$this->view])) {
-            return call_user_func_array($this->viewList[$this->view],
-                    array(&$this));
-        }
         $scl_id = (int)edkURI::getArg('scl_id');
 
         switch ($this->view)
@@ -420,28 +418,6 @@ class pPilotDetail extends pageAssemblyEx
        }
    }
 
-    /**
-
-     * Add a type of view to the options.
-
-     *
-     * @param string $view The name of the view to recognise.
-     * @param mixed $callback The method to call when this view is used.
-     */
-    function addView($view, $callback)
-    {
-        $this->viewList[$view] = $callback;
-    }
-
-    /**
-     * Return the set view.
-     * @return string
-     */
-    function getView()
-    {
-        return $this->view;
-    }
-        
     /**
      * Return the Pilot
      * @return Pilot

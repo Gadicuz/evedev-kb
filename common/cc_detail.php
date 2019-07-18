@@ -5,22 +5,21 @@
  * $HeadURL$
  * @package EDK
  */
+require_once('common/includes/trait.pageview.php');
 
 /*
  * @package EDK
  */
 class pContractDetail extends pageAssemblyEx
 {
+    use pageView;
+
     /** @var integer The ID for this page's Contract. */
     public $ctr_id;
     
-    /** @var string The selected view. */
-    protected $view = null;
     /** @var Contract The Contract this page is built from. */
     protected $contract;
 
-    /** @var array The list of views and their callbacks. */
-    protected $viewList = array();
     /** @var array The list of menu options to display. */
     protected $menuOptions = array();
 
@@ -59,8 +58,6 @@ class pContractDetail extends pageAssemblyEx
         $this->page = new Page();
         $this->ctr_id = (int)edkURI::getArg('ctr_id', 1);
         $this->view = preg_replace('/[^a-zA-Z0-9_-]/','', edkURI::getArg('view', 2));
-
-        $this->viewList = array();
 
         $this->menuOptions = array();
 
@@ -165,10 +162,8 @@ class pContractDetail extends pageAssemblyEx
      */
     function killList()
     {
-        if(isset($this->viewList[$this->view])) {
-            return call_user_func_array($this->viewList[$this->view],
-                    array(&$this));
-        }
+        $v = $this->processView();
+        if ( isset($v) ) return $v;
 
         $scl_id = (int)edkURI::getArg('scl_id');
         
@@ -345,26 +340,6 @@ class pContractDetail extends pageAssemblyEx
        }
    }
    
-    /**
-     * Add a type of view to the options.
-     *
-     * @param string $view The name of the view to recognise.
-     * @param mixed $callback The method to call when this view is used.
-     */
-    function addView($view, $callback)
-    {
-        $this->viewList[$view] = $callback;
-    }
-
-    /**
-     * Return the set view.
-     * @return string
-     */
-    function getView()
-    {
-        return $this->view;
-    }
-    
     function getContract() 
     {
         return $this->contract;

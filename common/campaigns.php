@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+require_once('common/includes/trait.pageview.php');
 
 $page = new Page('Campaigns');
 /*
@@ -12,12 +13,9 @@ $page = new Page('Campaigns');
  */
 class pCampaignList extends pageAssemblyEx
 {
-    /** @var string The selected view. */
-    protected $view = null;
-    /** @var array The list of views and their callbacks. */
-    protected $viewList = array();
     /** @var array The list of menu options to display. */
     protected $menuOptions = array();
+    use pageView;
 
     /**
      * Construct the Contract Details object.
@@ -27,9 +25,6 @@ class pCampaignList extends pageAssemblyEx
     function __construct()
     {
         parent::__construct();
-
-        $this->view = preg_replace('/[^a-zA-Z0-9_-]/','', edkURI::getArg('view', 1));
-
         $this->queue("start");
         $this->queue("listCampaigns");
 
@@ -51,15 +46,17 @@ class pCampaignList extends pageAssemblyEx
     function start()
     {
         $this->page = new Page();
+
+        $this->view = preg_replace('/[^a-zA-Z0-9_-]/','', edkURI::getArg('view', 1));
     }
     /**
      *  Show the list of campaigns.
      */
     function listCampaigns()
     {
-        if(isset($this->viewList[$this->view])) {
-            return call_user_func_array($this->viewList[$this->view], array(&$this));
-        }
+        $v = $this->processView();
+        if ( isset($v) ) return $v;
+
         $pageNum = (int)edkURI::getArg('page');
 
         switch ($this->view)
@@ -141,27 +138,6 @@ class pCampaignList extends pageAssemblyEx
        }
    }
 
-    /**
-
-     * Add a type of view to the options.
-
-     *
-     * @param string $view The name of the view to recognise.
-     * @param mixed $callback The method to call when this view is used.
-     */
-    function addView($view, $callback)
-    {
-        $this->viewList[$view] = $callback;
-    }
-
-    /**
-     * Return the set view.
-     * @return string
-     */
-    function getView()
-    {
-        return $this->view;
-    }
 }
 
 $campaignList = new pCampaignList();

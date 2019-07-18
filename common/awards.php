@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+require_once('common/includes/trait.pageview.php');
 
 /*
  * @package EDK
@@ -13,8 +14,8 @@ class pAwards extends pageAssemblyEx
 {
     /** @var array The array of menu options */
     protected $menuOptions;
-    /** @var array The array of possible views */
-    protected $viewList;
+    use pageView;
+
     /** @var array The array of TopLists to display */
     private $listList;
 
@@ -22,8 +23,6 @@ class pAwards extends pageAssemblyEx
     protected $month;
     /** @var integer The currently selected year */
     protected $year;
-    /** @var string The current user-selected view */
-    protected $view;
 
     /**
      * Construct the Alliance Details object.
@@ -89,10 +88,8 @@ class pAwards extends pageAssemblyEx
 
     function awards()
     {
-        if (isset($this->viewList[$this->view])) {
-            return call_user_func_array($this->viewList[$this->view],
-                    array(&$this));
-        }
+        $v = $this->processView();
+        if ( isset($v) ) return $v;
 
         global $smarty;
         $awardboxes = array();
@@ -286,17 +283,6 @@ class pAwards extends pageAssemblyEx
    }
 
     /**
-     * Add a type of view to the options.
-     *
-     * @param string $view The name of the view to recognise.
-     * @param mixed $callback The method to call when this view is used.
-     */
-    function addView($view, $callback)
-    {
-        $this->viewList[$view] = $callback;
-    }
-
-    /**
      * Return the set month.
      * @return integer
      */
@@ -314,14 +300,6 @@ class pAwards extends pageAssemblyEx
         return $this->year;
     }
 
-    /**
-     * Return the set view.
-     * @return string
-     */
-    function getView()
-    {
-        return $this->view;
-    }
 }
 
 $award = new pAwards();

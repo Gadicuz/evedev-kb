@@ -5,20 +5,20 @@
  * $HeadURL$
  * @package EDK
  */
+require_once('common/includes/trait.pageview.php');
+
 /*
  * @package EDK
  */
 class pSystemDetail extends pageAssemblyEx
 {
+    use pageView;
+
     /** @var integer */
     public $sys_id = 0;
 
     /** @var System */
     protected $system;
-    /** @var string The selected view. */
-    protected $view = null;
-    /** @var array The list of views and their callbacks. */
-    protected $viewList = array();
     /** @var array The list of menu options to display. */
     protected $menuOptions = array();
 
@@ -53,7 +53,6 @@ class pSystemDetail extends pageAssemblyEx
 
         global $smarty;
         $this->smarty = $smarty;
-        $this->viewList = array();
         $this->menuOptions = array();
 
         $this->page = new Page();
@@ -112,11 +111,10 @@ class pSystemDetail extends pageAssemblyEx
      */
     function killList()
     {
+        $v = $this->processView();
+        if ( isset($v) ) return $v;
+
         global $smarty;
-        if (isset($this->viewList[$this->view])) {
-            return call_user_func_array(
-                    $this->viewList[$this->view], array(&$this));
-        }
         $scl_id = (int)edkURI::getArg('scl_id');
 
         $klist = new KillList();
@@ -312,28 +310,6 @@ class pSystemDetail extends pageAssemblyEx
             $this->page->addHeader('<meta name="twitter:card" content="summary">');
         }
 
-    /**
-
-     * Add a type of view to the options.
-
-     *
-     * @param string $view The name of the view to recognise.
-     * @param mixed $callback The method to call when this view is used.
-     */
-    function addView($view, $callback)
-    {
-        $this->viewList[$view] = $callback;
-    }
-
-    /**
-     * Return the set view.
-     * @return string
-     */
-    function getView()
-    {
-        return $this->view;
-    }
-        
     /**
      * Return the system
      * @return SolarSystem

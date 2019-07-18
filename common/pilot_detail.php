@@ -7,6 +7,7 @@
  */
 use Swagger\Client\ApiException;
 use EDK\ESI\ESI;
+require_once('common/includes/trait.contextmenu.php');
 require_once('common/includes/trait.pageview.php');
 
 /*
@@ -14,6 +15,7 @@ require_once('common/includes/trait.pageview.php');
  */
 class pPilotDetail extends pageAssemblyEx
 {
+    use contextMenu;
     use pageView;
 
     /** @var integer */
@@ -21,8 +23,6 @@ class pPilotDetail extends pageAssemblyEx
         
     /** @var Pilot the pilot */
     public $pilot = null;
-    /** @var array The list of menu options to display. */
-    protected $menuOptions = array();
     /** @var integer */
     protected $lpoints = 0;
     /** @var integer */
@@ -314,24 +314,6 @@ class pPilotDetail extends pageAssemblyEx
         $this->addMenuItem("link","Ships &amp; weapons", edkURI::build($args, array('view', 'ships_weapons', true)));
         return "";
     }
-    /**
-     * Build the menu.
-     *
-     *  Add all preset options to the menu.
-     */
-    function menu()
-    {
-        $menubox = new box("Menu");
-        $menubox->setIcon("menu-item.gif");
-        foreach($this->menuOptions as $options)
-        {
-            if(isset($options[2]))
-                $menubox->addOption($options[0],$options[1], $options[2]);
-            else
-                $menubox->addOption($options[0],$options[1]);
-        }
-        return $menubox->generate();
-    }
         
          /** 
          * adds meta tags for Twitter Summary Card and OpenGraph tags
@@ -386,37 +368,6 @@ class pPilotDetail extends pageAssemblyEx
         }
         return $html;
     }
-
-    /**
-
-     * Add an item to the menu in standard box format.
-
-     *
-     *  Only links need all 3 attributes
-     * @param string $type Types can be caption, img, link, points.
-     * @param string $name The name to display.
-     * @param string $url Only needed for URLs.
-     */
-    function addMenuItem($type, $name, $url = '')
-    {
-        $this->menuOptions[] = array($type, $name, $url);
-    }
-    
-    /**
-    * Removes the menu item with the given name
-    * 
-    * @param string $name the name of the menu item to remove
-    */
-   function removeMenuItem($name)
-   {
-       foreach((array)$this->menuOptions AS $menuItem)
-       {
-           if(count($menuItem) > 1 && $menuItem[1] == $name)
-           {
-               unset($this->menuOptions[key($this->menuOptions)]);
-           }
-       }
-   }
 
     /**
      * Return the Pilot

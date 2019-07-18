@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+require_once('common/includes/trait.contextmenu.php');
 require_once('common/includes/trait.pageview.php');
 
 /*
@@ -12,6 +13,7 @@ require_once('common/includes/trait.pageview.php');
  */
 class pSystemDetail extends pageAssemblyEx
 {
+    use contextMenu;
     use pageView;
 
     /** @var integer */
@@ -19,8 +21,6 @@ class pSystemDetail extends pageAssemblyEx
 
     /** @var System */
     protected $system;
-    /** @var array The list of menu options to display. */
-    protected $menuOptions = array();
 
     /** @var KillSummaryTable */
     private $kill_summary = null;
@@ -53,7 +53,6 @@ class pSystemDetail extends pageAssemblyEx
 
         global $smarty;
         $this->smarty = $smarty;
-        $this->menuOptions = array();
 
         $this->page = new Page();
         $this->page->addHeader('<meta name="robots" content="noindex, nofollow" />');
@@ -67,7 +66,6 @@ class pSystemDetail extends pageAssemblyEx
                 edkURI::build($this->args)."' />");
 
         $this->system = new SolarSystem($this->sys_id);
-        $this->menuOptions = array();
         $this->page->setTitle('System details - '.$this->system->getName());
         $this->smarty->assign('sys_id', $this->sys_id);
     }
@@ -187,52 +185,6 @@ class pSystemDetail extends pageAssemblyEx
                 edkURI::build($args, array('view', 'recent', true)));
         return "";
     }
-
-    /**
-     * Build the menu.
-     *
-     *  Add all preset options to the menu.
-     */
-    function menu()
-    {
-        $menubox = new box("Menu");
-        $menubox->setIcon("menu-item.gif");
-        foreach ($this->menuOptions as $options) {
-            if (isset($options[2]))
-                    $menubox->addOption($options[0], $options[1], $options[2]);
-            else $menubox->addOption($options[0], $options[1]);
-        }
-        return $menubox->generate();
-    }
-
-    /**
-     * Add an item to the menu in standard box format.
-     *
-     *  Only links need all 3 attributes
-     * @param string $type Types can be caption, img, link, points.
-     * @param string $name The name to display.
-     * @param string $url Only needed for URLs.
-     */
-    function addMenuItem($type, $name, $url = '')
-    {
-        $this->menuOptions[] = array($type, $name, $url);
-    }
-    
-    /**
-    * Removes the menu item with the given name
-    * 
-    * @param string $name the name of the menu item to remove
-    */
-   function removeMenuItem($name)
-   {
-       foreach((array)$this->menuOptions AS $menuItem)
-       {
-           if(count($menuItem) > 1 && $menuItem[1] == $name)
-           {
-               unset($this->menuOptions[key($this->menuOptions)]);
-           }
-       }
-   }
         
         /**
      *

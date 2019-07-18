@@ -9,12 +9,14 @@
 if (config::get('comments')) {
     require_once('common/includes/xajax.functions.php');
 }
+require_once('common/includes/trait.contextmenu.php');
 
 /**
  * @package EDK
  */
 class pKillDetail extends pageAssemblyEx
 {
+    use contextMenu;
     
     /** @var integer The id of the kill this page is for. */
     public $kll_id;
@@ -22,8 +24,6 @@ class pKillDetail extends pageAssemblyEx
     public $kll_external_id;
     /** @var Kill The Kill for the page's kill. */
     protected $kill;
-    /** @var array */
-    protected $menuOptions = array();
     /** @var boolean */
     protected $nolimit = false;
     /** @var array Array of all involved Alliances*/
@@ -97,8 +97,6 @@ class pKillDetail extends pageAssemblyEx
             }
         }
         $this->nolimit = edkURI::getArg('nolimit', 2);
-
-        $this->menuOptions = array();
 
         $this->page = new Page('Kill details');
 
@@ -1486,28 +1484,6 @@ class pKillDetail extends pageAssemblyEx
     }
 
     /**
-     * Build the menu.
-     *
-     *  Add all preset options to the menu.
-     *
-     * @return string HTML for the menus
-     */
-    function menu()
-    {
-        $menubox = new Box("Menu");
-        $menubox->setIcon("menu-item.gif");
-        foreach ($this->menuOptions as $options) {
-            call_user_func_array(array($menubox, 'addOption'), $options);
-//            if(isset($options[2]))
-//                $menubox->addOption($options[0],$options[1], $options[2]);
-//            else
-//                $menubox->addOption($options[0],$options[1]);
-        }
-
-        return $menubox->generate();
-    }
-
-    /**
      * Returns HTML for the points for this kill
      *
      * @return string HTML for the points for this kill
@@ -1557,34 +1533,6 @@ class pKillDetail extends pageAssemblyEx
         return '';
     }
 
-    /**
-     * Add an item to the menu in standard box format.
-     *
-     *  Only links need all 3 attributes
-     * @param string $type Types can be caption, img, link, points.
-     * @param string $name The name to display.
-     * @param string $url Only needed for URLs.
-     */
-    function addMenuItem($type, $name, $url = '')
-    {
-        $this->menuOptions[] = func_get_args();
-    }
-    
-    /**
-    * Removes the menu item with the given name
-    * 
-    * @param string $name the name of the menu item to remove
-    */
-   function removeMenuItem($name)
-   {
-       foreach((array)$this->menuOptions AS $menuItem)
-       {
-           if(count($menuItem) > 1 && $menuItem[1] == $name)
-           {
-               unset($this->menuOptions[key($this->menuOptions)]);
-           }
-       }
-   }
 
     /**
      * Update the stored value of an item and the total value of this kill.

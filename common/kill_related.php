@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+require_once('common/includes/trait.contextmenu.php');
 
 /*
  * Build the related kills page.
@@ -12,6 +13,7 @@
  */
 class pKillRelated extends pageAssemblyEx
 {
+    use contextMenu;
 
     /** @var array \SolarSystem */
     protected $systems = array();
@@ -29,8 +31,6 @@ class pKillRelated extends pageAssemblyEx
     public $kll_id;
     /** @var Kill */
     protected $kill;
-    /** @var array */
-    protected $menuOptions = array();
     /** @var string timestamp for the first kill of the battle */
     protected $firstts;
     /** @var string timestamp for the last kill of the battle */
@@ -92,8 +92,6 @@ class pKillRelated extends pageAssemblyEx
         }
         $this->adjacent = edkURI::getArg('adjacent');
         $this->scl_id = (int) edkURI::getArg('scl_id');
-
-        $this->menuOptions = array();
 
         if (!$this->kll_id || !$this->kill->exists()) {
             echo 'No valid kill id specified';
@@ -687,48 +685,6 @@ class pKillRelated extends pageAssemblyEx
                 edkURI::build(array('a', 'kill_detail', true),
                         array('kll_id', $this->kll_id, true)));
     }
-
-    public function menu()
-    {
-        $menubox = new Box("Menu");
-        $menubox->setIcon("menu-item.gif");
-        foreach ($this->menuOptions as $options) {
-            if (isset($options[2]))
-                    $menubox->addOption($options[0], $options[1], $options[2]);
-            else $menubox->addOption($options[0], $options[1]);
-        }
-
-        return $menubox->generate();
-    }
-
-    /**
-     * Add an item to the menu in standard box format.
-     *
-     * Only links need all 3 attributes
-     * @param string $type Types can be caption, img, link, points.
-     * @param string $name The name to display.
-     * @param string $url Only needed for URLs.
-     */
-    function addMenuItem($type, $name, $url = '')
-    {
-        $this->menuOptions[] = array($type, $name, $url);
-    }
-    
-    /**
-    * Removes the menu item with the given name
-    * 
-    * @param string $name the name of the menu item to remove
-    */
-   function removeMenuItem($name)
-   {
-       foreach((array)$this->menuOptions AS $menuItem)
-       {
-           if(count($menuItem) > 1 && $menuItem[1] == $name)
-           {
-               unset($this->menuOptions[key($this->menuOptions)]);
-           }
-       }
-   }
    
    function getSystems() 
    {

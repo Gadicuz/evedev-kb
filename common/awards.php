@@ -5,6 +5,7 @@
  * $HeadURL$
  * @package EDK
  */
+require_once('common/includes/trait.contextmenu.php');
 require_once('common/includes/trait.pageview.php');
 
 /*
@@ -12,8 +13,7 @@ require_once('common/includes/trait.pageview.php');
  */
 class pAwards extends pageAssemblyEx
 {
-    /** @var array The array of menu options */
-    protected $menuOptions;
+    use contextMenu;
     use pageView;
 
     /** @var array The array of TopLists to display */
@@ -210,23 +210,6 @@ class pAwards extends pageAssemblyEx
     }
 
     /**
-     * Build the menu.
-     *  Additional options that have been set are added to the menu.
-     */
-    function menu()
-    {
-        $menubox = new Box("Menu");
-        $menubox->setIcon("menu-item.gif");
-        foreach($this->menuOptions as $options)
-        {
-            if(isset($options[2]))
-                $menubox->addOption($options[0],$options[1], $options[2]);
-            else
-                $menubox->addOption($options[0],$options[1]);
-        }
-        return $menubox->generate();
-    }
-    /**
      * Set up the menu.
      *
      * Additional options that have been set are added to the menu.
@@ -253,34 +236,6 @@ class pAwards extends pageAssemblyEx
         if (! ($this->month == kbdate("m") - 1 && $this->year == kbdate("Y")))
             $this->addMenuItem("link", "Next month", edkURI::build(array('y', $nyear, true), array('m', $nmonth, true)));
     }
-    /**
-     * Add an item to the menu in standard box format.
-     *
-     *  Only links need all 3 attributes
-     * @param string $type Types can be caption, img, link, points.
-     * @param string $name The name to display.
-     * @param string $url Only needed for URLs.
-     */
-    function addMenuItem($type, $name, $url = '')
-    {
-        $this->menuOptions[] = array($type, $name, $url);
-    }
-    
-    /**
-    * Removes the menu item with the given name
-    * 
-    * @param string $name the name of the menu item to remove
-    */
-   function removeMenuItem($name)
-   {
-       foreach((array)$this->menuOptions AS $menuItem)
-       {
-           if(count($menuItem) > 1 && $menuItem[1] == $name)
-           {
-               unset($this->menuOptions[key($this->menuOptions)]);
-           }
-       }
-   }
 
     /**
      * Return the set month.
